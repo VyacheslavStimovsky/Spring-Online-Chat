@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <style>
+        p{
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<form action="/logout" method="post">
+    <input type="submit" value="Sign Out"/>
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+</form>
+<p th:text="'Hi ' + ${sender}"></p>
+<form action="/sendMessage" method="post" id="sendMsg">
+    <input type="text" name="messageText" class="textInput">
+    <input type="hidden" th:value="${sender}" name="sender">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <input type="submit" value="Send Message"/>
+</form>
+<div class="messages">
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function (event) {
+        $("#sendMsg").submit(function (event) {
+            var msgEntity = {};
+            msgEntity.sender = /*[[${message}]]*/ 'anonymous';
+            msgEntity.messageText = $('.textInput').value();
+            $.ajax({
+               type: 'post',
+               url: '/sendMessage',
+               data: JSON.stringify(msgEntity),
+               dataType: 'json'
+            });
+            return false;
+        });
+        setInterval(getMsg,200);
+    });
+
+    function getMsg() {
+        $.ajax(
+            {
+                type: 'get',
+                url: 'getMessages',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    $('.messages').html('');
+                    for(let i=0; i < data.length;++i)
+                    {
+                        $(".messages").append('<p style="color:darkred">'+data[i].sender+'</p>'+':'+'<p>'+ data[i].messageText+'</p>'+'<hr>');
+                    }
+                },
+                error: function (e) {
+                    alert("ERROR, CAN'T TAKE MESSAGE");
+                }
+
+            }
+        );
+    }
+</script>
+</body>
+</html>
