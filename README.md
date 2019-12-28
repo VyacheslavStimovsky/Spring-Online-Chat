@@ -15,7 +15,7 @@
 ## HTML
 * Bootstrap
 
-##JavaScript
+## JavaScript
 * JQuery
 
 ------------------------
