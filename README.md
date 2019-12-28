@@ -1,11 +1,11 @@
 ## Курсовой проект студента Витюка Вячеслава
 ### Тема - online chat на Spring
+### Поддержка зависимостей - Maven
 ###### Использованные фреймворки:
 
 ## Java
-* Maven
-  * PostgreSQL driver
-  * Thymeleaf
+* PostgreSQL driver
+* Thymeleaf
 * Spring
   * Spring Security
   * Spring Boot
